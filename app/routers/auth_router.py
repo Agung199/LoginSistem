@@ -11,7 +11,7 @@ from app.auth import hash_password
 from app.auth import verify_password
 from app.auth import create_access_token
 
-import sqlite3
+# import sqlite3
 
 # membuat Endpoint profile
 from app.auth import get_current_user
@@ -19,7 +19,7 @@ from app.auth import get_current_user
 router = APIRouter()
 
 
-from app.database import get_connection
+# from app.database import get_connection
 
 
 @router.post("/register")
