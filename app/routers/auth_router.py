@@ -11,41 +11,47 @@ from app.auth import hash_password
 from app.auth import verify_password
 from app.auth import create_access_token
 
+import sqlite3
+
 # membuat Endpoint profile
 from app.auth import get_current_user
 
 router = APIRouter()
 
 
+from app.database import get_connection
+
+
 @router.post("/register")
 def register(data: RegisterSchema):
 
-    conn = get_connection()
-    cursor = conn.cursor()
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM users WHERE email = ?", (data.email,))
+        cursor.execute("SELECT * FROM users WHERE email = ?", (data.email,))
 
-    existing_user = cursor.fetchone()
+        existing_user = cursor.fetchone()
 
-    if existing_user:
+        if existing_user:
+            raise HTTPException(status_code=400, detail="Email already exists")
+
+        hashed_password = hash_password(data.password)
+
+        cursor.execute(
+            """
+            INSERT INTO users (username, email, password)
+            VALUES (?, ?, ?)
+            """,
+            (data.username, data.email, hashed_password),
+        )
+
+        conn.commit()
+
+        return {"message": "User created successfully"}
+
+    finally:
         conn.close()
-
-        raise HTTPException(status_code=400, detail="Email ready Exists")
-
-    hashed_password = hash_password(data.password)
-
-    cursor.execute(
-        """
-        INSERT INTO users (username, email, password)
-        VALUES (?,?,?)
-        """,
-        (data.username, data.email, hashed_password),
-    )
-
-    conn.commit()
-    conn.close()
-
-    return {"message": "users created successful"}
 
 
 @router.post("/login")

@@ -5,7 +5,7 @@ DATABASE_NAME = "sekolah.db"
 
 # CONNECT DATABASE
 def get_connection():
-    conn = sqlite3.connect("sekolah.db")
+    conn = sqlite3.connect("sekolah.db", timeout=10, check_same_thread=False)
     conn.row_factory = sqlite3.Row
 
     return conn
