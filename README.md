@@ -20,10 +20,10 @@ Simple authentication Api using FastApi and SQlite.
 
 ## instalation 
 
-clone repository:
+clone LoginSistem:
 
 --bash 
-   
+   https://github.com/Agung199/LoginSistem.git
 
 masuk ke folder project:
 --bash
