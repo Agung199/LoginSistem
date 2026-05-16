@@ -2,7 +2,7 @@
 from starlette.middleware.base import BaseHTTPMiddleware
 
 
-class LogingMiddleware(BaseHTTPMiddleware):
+class LoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
 
         print(f"Request URL: {request.url}")
