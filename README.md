@@ -2,14 +2,19 @@
 
 Simple authentication Api using FastApi and SQlite.
 
-## Features
+##  Features
 
-- Register User
-- login user
-- JWt authentication
-- Protected route
-- SQlite database
-- password hashing
+- User Register
+- User Login
+- JWT Authentication
+- Protected Routes
+- Password Hashing (bcrypt)
+- SQLite Database Integration
+- Middleware Logging
+- Auto Deploy via GitHub + Railway
+
+---
+
 
 ## technologis
 - FastApi
@@ -63,6 +68,23 @@ uvicorn main:app --reload
 ```text
 http://127.0.0.1:8000/docs
 ```
+
+# API base URL production 
+https://loginsistem-production.up.railway.app
+
+#  Login System API (FastAPI + JWT + SQLite)
+
+Project ini adalah REST API sistem login menggunakan FastAPI, JWT Authentication, dan SQLite sebagai database. Project ini sudah di-deploy menggunakan Railway.
+
+## Tech Stack
+
+- FastAPI
+- Python 3.13
+- SQLite
+- JWT Authentication (JSON Web Token)
+- Uvicorn
+- Railway Deployment
+
 
 ## API Endpoints
 
