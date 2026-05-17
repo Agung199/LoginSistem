@@ -69,6 +69,11 @@ uvicorn main:app --reload
 http://127.0.0.1:8000/docs
 ```
 
+```
+SWAGGER UI
+https://loginsistem-production.up.railway.app/docs
+```
+
 # API base URL production 
 https://loginsistem-production.up.railway.app
 
