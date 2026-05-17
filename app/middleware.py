@@ -1,15 +1,17 @@
-# membuat middleware logging
 from starlette.middleware.base import BaseHTTPMiddleware
+from fastapi import Request
+import time
 
 
 class LoggingMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request, call_next):
+    async def dispatch(self, request: Request, call_next):
 
-        print(f"Request URL: {request.url}")
-        print(f"Request Methode: {request.method}")
+        start_time = time.time()
 
         response = await call_next(request)
 
-        print(f"Response status: {response.status_code}")
+        process_time = time.time() - start_time
+
+        print(f"{request.method} {request.url.path} - {process_time:.4f}s")
 
         return response
