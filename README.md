@@ -110,7 +110,29 @@ app/
  ├── schemas.py
  └── routers/
 
-## Author
+## Authentication Flow
+- Register User
+- Login User
+- Get jwt token
+- Access protected routes using
+    Authorization: Bearer <token>
 
-AGUNG HARY AWAN
+## example respone
+{
+  "message": "FastAPI SQLite Login API running"
+}
+
+## Security
+- Password hashing menggunakan bcrypt
+- JWT token-based Authentication
+- Protected route middleware
+
+## Deployment
+Project ini di deploy menggunakan:
+- Railway cloud platform
+- Auto deploy dari Github branch main
+
+
+## Author
+Github : Agung199
 
