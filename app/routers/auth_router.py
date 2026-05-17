@@ -2,7 +2,10 @@
 from fastapi import APIRouter
 from fastapi import HTTPException, Depends
 
-from app.database import get_connection
+# from app.database import get_connection
+from sqlalchemy.orm import Session
+from app.database import get_db
+from app.models.user_model import User
 
 from app.schemas import RegisterSchema
 from app.schemas import LoginSchema
@@ -22,66 +25,60 @@ router = APIRouter()
 # from app.database import get_connection
 
 
+# REGISTER
 @router.post("/register")
-def register(data: RegisterSchema):
+def register(user: RegisterSchema, db: Session = Depends(get_db)):
 
-    try:
-        conn = get_connection()
-        cursor = conn.cursor()
+    # cek email sudah ada
+    existing_user = db.query(User).filter(User.email == user.email).first()
 
-        cursor.execute("SELECT * FROM users WHERE email = ?", (data.email,))
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
 
-        existing_user = cursor.fetchone()
+    # buat user baru
+    new_user = User(
+        username=user.username,
+        email=user.email,
+        password=hash_password(user.password),
+    )
 
-        if existing_user:
-            raise HTTPException(status_code=400, detail="Email already exists")
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
 
-        hashed_password = hash_password(data.password)
-
-        cursor.execute(
-            """
-            INSERT INTO users (username, email, password)
-            VALUES (?, ?, ?)
-            """,
-            (data.username, data.email, hashed_password),
-        )
-
-        conn.commit()
-
-        return {"message": "User created successfully"}
-
-    finally:
-        conn.close()
+    return {"message": "User created successfully"}
 
 
+# LOGIN
 @router.post("/login")
-def login(data: LoginSchema):
-    conn = get_connection()
-    cursor = conn.cursor()
+def login(data: LoginSchema, db: Session = Depends(get_db)):
 
-    cursor.execute("SELECT * FROM users WHERE email = ?", (data.email,))
-
-    user = cursor.fetchone()
-
-    conn.close()
+    # cari user berdasarkan email
+    user = db.query(User).filter(User.email == data.email).first()
 
     if not user:
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
-    password_valid = verify_password(data.password, user["password"])
+    # verifikasi password
+    password_valid = verify_password(data.password, user.password)
 
     if not password_valid:
-        raise HTTPException(status_code=401, detail="invalid email or password")
+        raise HTTPException(status_code=401, detail="Invalid email or password")
 
-    token = create_access_token(data={"sub": str(user["id"])})
+    # generate jwt token
+    token = create_access_token(data={"sub": str(user.id)})
 
-    return {"access_token": token, "toekn_type": "bearer"}
+    return {"access_token": token, "token_type": "bearer"}
 
 
 # membuat Endpoint profile
 
 
+# PROFILE
 @router.get("/me")
 def profile(user=Depends(get_current_user)):
 
-    return {"message": "Protected current user success", "user": user}
+    return {
+        "message": "Protected current user success",
+        "user": user,
+    }
