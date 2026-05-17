@@ -19,10 +19,15 @@ import os
 load_dotenv()
 
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://postgres:KLtNHJrxaitSDZvMlzyLyGHgczCIseEF@postgres.railway.internal:5432/railway",
-)
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL is not set")
+
+# Fix Railway postgres://
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 
 engine = create_engine(DATABASE_URL)
 
