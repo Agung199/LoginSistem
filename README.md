@@ -22,6 +22,7 @@ Simple authentication Api using FastApi and SQlite.
 - pydantic
 - jwt 
 - paslib
+- postgresql
 
 ## instalation 
 
@@ -131,6 +132,23 @@ app/
 Project ini di deploy menggunakan:
 - Railway cloud platform
 - Auto deploy dari Github branch main
+
+#  Database Migration: SQLite → PostgreSQL
+
+Project ini telah diperbarui dari menggunakan SQLite menjadi PostgreSQL untuk mendukung deployment production dan integrasi dengan Railway.
+
+---
+
+##  Perubahan Database
+
+### Sebelumnya — SQLite
+
+Project sebelumnya menggunakan SQLite:
+
+```python
+import sqlite3
+
+DATABASE_NAME = "sekolah.db"
 
 
 ## Author
