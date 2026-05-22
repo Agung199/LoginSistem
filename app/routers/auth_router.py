@@ -40,6 +40,7 @@ def register(user: RegisterSchema, db: Session = Depends(get_db)):
         username=user.username,
         email=user.email,
         password=hash_password(user.password),
+        role="user",
     )
 
     db.add(new_user)

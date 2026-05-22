@@ -11,3 +11,5 @@ class User(Base):
     password = Column(String, nullable=False)
 
     created_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+
+    role = Column(String, default="user")
