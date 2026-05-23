@@ -1,9 +1,10 @@
 # MEMBUAT MAIN FASTAPI app
-from fastapi import FastAPI, Depends, Session
+from fastapi import FastAPI, Depends
 from app.database import Base, engine
 from app.models.user_model import User
-from database import get_db
+from app.database import get_db
 from app.auth import require_admin
+from sqlalchemy.orm import Session
 
 # from app.database import create_user_table
 from app.middleware import LoggingMiddleware
