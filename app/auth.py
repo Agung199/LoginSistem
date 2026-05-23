@@ -8,10 +8,10 @@ from datetime import datetime, timedelta
 from fastapi import Depends
 from fastapi import HTTPException
 from app.models import user_model
-from app.security.jwt import get_current_user
+#from app.security.jwt import get_current_user
 
 from fastapi.security import HTTPBearer
-#from fastapi.security import HTTPAuthorizationCredentials
+from fastapi.security import HTTPAuthorizationCredentials
 import hashlib
 
 SECRET_KEY = "your-secret-key"
@@ -58,21 +58,21 @@ def decode_access_token(token: str):
 security = HTTPBearer()
 
 
-#def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
 
-#    token = credentials.credentials
+    token = credentials.credentials
 
-#    payload = decode_access_token(token)
+    payload = decode_access_token(token)
 
-#    if not payload:
-#        raise HTTPException(status_code=401, detail="invalid token")
+    if not payload:
+        raise HTTPException(status_code=401, detail="invalid token")
 
-#    return payload
+    return payload
 
 
 def require_admin(current_user: user_model = Depends(get_current_user)):
 
-    if current_user.role != "admin":
+    if current_user.get("role") != "admin":
         raise HTTPException(status_code=403, detail="Admin access required")
 
     return current_user
