@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from fastapi import Depends
 from fastapi import HTTPException
 from app.models import user_model
-from app.auth.jwt import get_current_user
+from app.security.jwt import get_current_user
 
 from fastapi.security import HTTPBearer
 #from fastapi.security import HTTPAuthorizationCredentials
