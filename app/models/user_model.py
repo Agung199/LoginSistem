@@ -12,4 +12,4 @@ class User(Base):
 
     created_at = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
 
-    role = Column(String, default="user")
+    role = Column(String, nullable=False, default="user")
