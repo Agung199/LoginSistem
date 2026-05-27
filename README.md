@@ -1,156 +1,198 @@
-# FatsApi login Api
+Login System API (FastAPI + PostgreSQL + JWT)
 
-Simple authentication Api using FastApi and SQlite.
+Simple Authentication REST API menggunakan FastAPI, PostgreSQL, JWT Authentication, dan Role-Based Access Control (RBAC).
 
-##  Features
+Project ini sudah di-deploy menggunakan Railway dan mendukung authentication production-ready.
 
-- User Register
-- User Login
-- JWT Authentication
-- Protected Routes
-- Password Hashing (bcrypt)
-- SQLite Database Integration
-- Middleware Logging
-- Auto Deploy via GitHub + Railway
+Features
+User Register
+User Login
+JWT Authentication
+Protected Routes
+Role-Based Access (Admin/User)
+Password Hashing (bcrypt)
+PostgreSQL Database
+Alembic Database Migration
+Middleware Logging
+Auto Deploy via GitHub + Railway
+Swagger API Documentation
 
----
+
+Tech Stack
+FastAPI
+PostgreSQL
+SQLAlchemy
+Alembic
+JWT (python-jose)
+Passlib bcrypt
+Pydantic
+Uvicorn
+Railway
 
 
-## technologis
-- FastApi
-- SQlite 
-- pydantic
-- jwt 
-- paslib
-- postgresql
+Installation
+Clone repository:
 
-## instalation 
+git clone https://github.com/Agung199/LoginSistem.git
 
-clone repository:
+Masuk ke folder project:
 
---bash 
-   https://github.com/Agung199/LoginSistem.git
-
-masuk ke folder project:
---bash
-    cd app
+cd LoginSistem
 
 Buat virtual environment:
-```bash
+
 python -m venv venv
-```
 
-Activate venv:
+Activate virtual environment:
 
-### Windows
-
-```bash
-venv\\Scripts\\activate
-```
-
-### Linux/macOS
-
-```bash
+Windows
+venv\Scripts\activate
+Linux/macOS
 source venv/bin/activate
-```
 
-install Dependenscy:
-```bash
+Install dependencies:
+
 pip install -r requirements.txt
-```
-## Run Server
+Environment Variables
 
-```bash
-uvicorn main:app --reload
-```
+Buat file .env
 
-## API Documentation
+DATABASE_PUBLIC_URL=postgresql://username:password@host:port/database
+SECRET_KEY=your_secret_key
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
 
-```text
+
+Run Server
+uvicorn app.main:app --reload
+
+
+API Documentation
+
+Swagger UI:
 http://127.0.0.1:8000/docs
-```
 
-```
-SWAGGER UI
+Production Swagger:
 https://loginsistem-production.up.railway.app/docs
-```
-
-# API base URL production 
+Production API URL
 https://loginsistem-production.up.railway.app
 
-#  Login System API (FastAPI + JWT + SQLite)
 
-Project ini adalah REST API sistem login menggunakan FastAPI, JWT Authentication, dan SQLite sebagai database. Project ini sudah di-deploy menggunakan Railway.
-
-## Tech Stack
-
-- FastAPI
-- Python 3.13
-- SQLite
-- JWT Authentication (JSON Web Token)
-- Uvicorn
-- Railway Deployment
+API Endpoints
+Method	Endpoint	Description
+POST	/register	Register user
+POST	/login	Login user
+GET	/me	Get current user
+GET	/admin	Admin only route
 
 
-## API Endpoints
+Authentication Flow
+Register User
+Login User
+Get JWT Token
+Access protected routes using:
+Authorization: Bearer <token>
 
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | /register | Register user |
-| POST | /login | Login user |
-| GET | /me | Protected route 
 
-## Project Structure
-
-```text
+Project Structure
 app/
- ├── main.py
- ├── database.py
- ├── auth.py
- ├── middleware.py
- ├── schemas.py
- └── routers/
+│
+├── main.py
+├── database.py
+├── middleware.py
+├── auth.py
+├── dependencies.py
+├── schemas/
+├── models/
+├── routers/
+│
+├── alembic/
+├── alembic.ini
+│
+├── requirements.txt
+└── .env
 
-## Authentication Flow
-- Register User
-- Login User
-- Get jwt token
-- Access protected routes using
-    Authorization: Bearer <token>
 
-## example respone
+PostgreSQL Configuration
+
+Project ini menggunakan PostgreSQL dari Railway.
+
+Contoh konfigurasi database:
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+DATABASE_URL = os.getenv("DATABASE_PUBLIC_URL")
+
+engine = create_engine(DATABASE_URL)
+
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine
+)
+
+Base = declarative_base()
+Database Migration (Alembic)
+
+Generate migration:
+
+alembic revision --autogenerate -m "create users table"
+
+Apply migration:
+
+alembic upgrade head
+
+Check current migration:
+
+alembic current
+Role-Based Access Control (RBAC)
+
+Project ini mendukung role:
+
+user
+admin
+
+Contoh endpoint admin:
+
+@app.get("/admin")
+def admin_route(current_user = Depends(get_current_admin)):
+    return {"message": "Welcome Admin"}
+
+
+Security
+Password hashing menggunakan bcrypt
+JWT token authentication
+Protected routes
+Role-based authorization
+Environment variables (.env)
+
+Deployment
+Project ini di-deploy menggunakan:
+
+Railway
+GitHub Auto Deploy
+PostgreSQL Railway Database
+Example Response
 {
-  "message": "FastAPI SQLite Login API running"
+  "message": "FastAPI PostgreSQL Login API running"
 }
 
-## Security
-- Password hashing menggunakan bcrypt
-- JWT token-based Authentication
-- Protected route middleware
 
-## Deployment
-Project ini di deploy menggunakan:
-- Railway cloud platform
-- Auto deploy dari Github branch main
+Future Improvements
+Email Verification
+Refresh Token
+Docker Support
+CI/CD Pipeline
+Redis Caching
+Unit Testing
+Rate Limiting
 
-#  Database Migration: SQLite → PostgreSQL
+Author
+GitHub:
 
-Project ini telah diperbarui dari menggunakan SQLite menjadi PostgreSQL untuk mendukung deployment production dan integrasi dengan Railway.
-
----
-
-##  Perubahan Database
-
-### Sebelumnya — SQLite
-
-Project sebelumnya menggunakan SQLite:
-
-```python
-import sqlite3
-
-DATABASE_NAME = "sekolah.db"
-
-
-## Author
-Github : Agung199
-
+Agung199/LoginSistem
