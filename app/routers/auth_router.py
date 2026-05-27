@@ -67,7 +67,7 @@ def login(data: LoginSchema, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
     # generate jwt token
-    token = create_access_token(data={"sub": str(user.id)})
+    token = create_access_token(data={"sub": user.email, "role": user.role})
 
     return {"access_token": token, "token_type": "bearer"}
 
