@@ -10,6 +10,11 @@ from sqlalchemy.orm import Session
 from app.middleware import LoggingMiddleware
 from app.routers.auth_router import router as auth_router
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi import Request
+from fastapi.responses import HTMLResponse
+
 
 app = FastAPI()
 
@@ -28,24 +33,46 @@ app.add_middleware(LoggingMiddleware)
 app.include_router(auth_router)
 
 
-@app.get("/")
-def home():
-    return {"message": "FastApi postgresql Login Api running"}
+templates = Jinja2Templates(directory="app/templates")
+
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+
+@app.get("/", response_class=HTMLResponse)
+async def login_page(request: Request):
+
+    return templates.TemplateResponse(request=request, name="login.html")
+
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard(request: Request):
+
+    return templates.TemplateResponse(request=request, name="dashboard.html")
+
+
+@app.get("/admin", response_class=HTMLResponse)
+async def admin(request: Request):
+
+    return templates.TemplateResponse(request=request, name="admin.html")
 
 
 @app.get("/users")
 def get_users(db: Session = Depends(get_db)):
     users = db.query(User).all()
 
-    return users
+    return {"data": users}
+
 
 @app.get("/admin")
-def admin_dashboard(
-    current_user: User = Depends(require_admin)
-):
+def admin_dashboard(current_user: User = Depends(require_admin)):
 
     return {
         "message": "Welcome Admin",
         "user": current_user.email,
-        "role": current_user.role
+        "role": current_user.role,
     }
+
+
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+templates = Jinja2Templates(directory="app/templates")

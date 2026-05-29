@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dashboard</title>
+</head>
+
+<body>
+
+    <h1>Dashboard User</h1>
+
+    <button onclick="getProfile()">
+        Get Profile
+    </button>
+
+    <button onclick="logout()">
+        Logout
+    </button>
+
+    <pre id="result"></pre>
+
+    <script>
+
+        async function getProfile() {
+
+            const token = localStorage.getItem("token");
+
+            const response = await fetch("/me", {
+
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+
+            });
+
+            const data = await response.json();
+
+            document.getElementById("result")
+                .innerText = JSON.stringify(data, null, 2);
+        }
+
+        // cek token
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+
+            window.location.href = "/";
+        }
+
+        // decode jwt
+        const payload = JSON.parse(
+            atob(token.split(".")[1])
+        );
+
+        // user tidak boleh admin
+        if (payload.role === "admin") {
+
+            window.location.href = "/admin";
+        }
+
+        function logout() {
+
+            localStorage.removeItem("token");
+
+            window.location.href = "/";
+        }
+
+    </script>
+
+
+</body>
+
+</html>
