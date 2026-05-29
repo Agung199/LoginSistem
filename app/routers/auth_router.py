@@ -13,8 +13,12 @@ from app.schemas import LoginSchema
 from app.auth import hash_password
 from app.auth import verify_password
 from app.auth import create_access_token
+from app.auth import require_admin
 
 # import sqlite3
+
+
+
 
 # membuat Endpoint profile
 from app.auth import get_current_user
@@ -83,3 +87,22 @@ def profile(user=Depends(get_current_user)):
         "message": "Protected current user success",
         "user": user,
     }
+
+# membuat endpoint khusus admin
+@router.put("/make-admin/{user_id}")
+def make_admin(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin),
+):
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    user.role = "admin"
+
+    db.commit()
+
+    return {"message": f"{user.username} is now admin"}

@@ -50,3 +50,17 @@ input[type="password"]:focus {
     font-size: 14px;
     border-radius: 10px !important;
 }
+
+.register-text {
+    color: white;
+}
+
+.register-link {
+    color: #48e248;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-link:hover {
+    opacity: 0.8;
+}
