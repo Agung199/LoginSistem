@@ -1,8 +1,8 @@
-Login System API (FastAPI + PostgreSQL + JWT)
+# Login System API (FastAPI + PostgreSQL + JWT)
 
-Simple Authentication REST API menggunakan FastAPI, PostgreSQL, JWT Authentication, dan Role-Based Access Control (RBAC).
+Authentication REST API menggunakan FastAPI, PostgreSQL, JWT Authentication, dan Role-Based Access Control (Admin/User).  
+Project ini sudah di-deploy menggunakan Railway dan memiliki frontend login sederhana menggunakan HTML, CSS, dan JavaScript.
 
-Project ini sudah di-deploy menggunakan Railway dan mendukung authentication production-ready.
 
 Features
 User Register
@@ -28,6 +28,12 @@ Passlib bcrypt
 Pydantic
 Uvicorn
 Railway
+
+## Frontend
+- HTML
+- CSS
+- JavaScript
+- Bootstrap 5
 
 
 Installation
@@ -139,7 +145,7 @@ SessionLocal = sessionmaker(
 Base = declarative_base()
 Database Migration (Alembic)
 
-Generate migration:
+## Generate migration:
 
 alembic revision --autogenerate -m "create users table"
 
@@ -164,7 +170,7 @@ def admin_route(current_user = Depends(get_current_admin)):
     return {"message": "Welcome Admin"}
 
 
-Security
+## Security
 Password hashing menggunakan bcrypt
 JWT token authentication
 Protected routes
@@ -174,7 +180,7 @@ Environment variables (.env)
 Deployment
 Project ini di-deploy menggunakan:
 
-Railway
+## Railway
 GitHub Auto Deploy
 PostgreSQL Railway Database
 Example Response
@@ -183,7 +189,7 @@ Example Response
 }
 
 
-Future Improvements
+## Future Improvements
 Email Verification
 Refresh Token
 Docker Support
@@ -192,7 +198,7 @@ Redis Caching
 Unit Testing
 Rate Limiting
 
-Author
+## Author
 GitHub:
 
 Agung199/LoginSistem
