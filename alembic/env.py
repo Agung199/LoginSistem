@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 from sqlalchemy import engine_from_config, pool
 
 from app.db.base import Base
-from app.models.user_model import User  # noqa: F401
+from app.models.user_model import User
+from app.models.task_model import Task
 
 load_dotenv()
 
@@ -65,3 +66,5 @@ else:
     run_migrations_online()
 
 print("DATABASE_PUBLIC_URL =", DATABASE_PUBLIC_URL)
+
+print(Base.metadata.tables.keys())
