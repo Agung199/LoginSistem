@@ -15,8 +15,11 @@ from fastapi.templating import Jinja2Templates
 from fastapi import Request
 from fastapi.responses import HTMLResponse
 
+from app.models.task_model import Task
+from app.routers.task_router import router as task_router
 
 app = FastAPI()
+app.include_router(task_router)
 
 
 @app.on_event("startup")

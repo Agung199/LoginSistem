@@ -18,8 +18,6 @@ from app.auth import require_admin
 # import sqlite3
 
 
-
-
 # membuat Endpoint profile
 from app.auth import get_current_user
 
@@ -71,7 +69,9 @@ def login(data: LoginSchema, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
     # generate jwt token
-    token = create_access_token(data={"sub": user.email, "role": user.role})
+    token = create_access_token(
+        data={"id": user.id, "sub": user.email, "role": user.role}
+    )
 
     return {"access_token": token, "token_type": "bearer"}
 
@@ -87,6 +87,7 @@ def profile(user=Depends(get_current_user)):
         "message": "Protected current user success",
         "user": user,
     }
+
 
 # membuat endpoint khusus admin
 @router.put("/make-admin/{user_id}")
